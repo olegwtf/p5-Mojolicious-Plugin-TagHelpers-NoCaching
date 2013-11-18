@@ -4,6 +4,8 @@ use Mojo::Base 'Mojolicious::Plugin';
 use Mojo::URL;
 use Mojo::Path;
 
+our $VERSION = '0.01';
+
 sub register {
 	my ($plugin, $app, $cfg) = @_;
 	
@@ -67,7 +69,10 @@ sub _href2filepath {
 		
 		if ($href !~ m!^/!) {
 			# relative url
-			$href = Mojo::Path->new($controller->req->url->path)->to_dir . $href;
+			my $path = $controller->req->url->path;
+			$path =~ s![^/]+$!!;
+			$path = '/' if $path eq '';
+			$href = $path . $href;
 		}
 	}
 	
