@@ -120,3 +120,92 @@ sub _nc_href {
 }
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Mojolicious::Plugin::TagHelpers::NoCaching - Prevent caching for images, styles, js if they were modified on FS
+
+=head1 SYNOPSIS
+
+    use Mojolicious::Lite;
+    
+    plugin 'TagHelpers::NoCaching', {key => 'v'};
+    
+    get '/' => 'index';
+    
+    __DATA__
+    
+    @@index.html.ep
+    <html>
+        <head>
+            %= javascript_nc "/js/app.js"
+            %= stylesheet_nc "/css/app.css"
+        </head>
+        <body>
+            My greate photo:<br>
+            %= image_nc "/img/avatar.jpg"
+        </body>
+    </html>
+
+=head1 DESCRIPTION
+
+When you updating your project on production with new version, new version often contains changed styles, javascript, images.
+You fetched all new files from repository, restarted application, but browsers still shows you old images, your html looks like
+a shit (because of old styles on new html), javascript events doesn't work (because of the old javascript). All of this because your
+browser cached old version of included files and don't want to reload it.
+
+If you ever come across this, this module will help you.
+
+=head1 HOW IT WORKS
+
+This plugin contains several helpers described below. All this helpers are alternatives for helpers with same name (but without _nc suffix)
+from L<Mojolicious::Plugin::TagHelpers>. "_nc" suffix in helpers names means "no caching". Behaviour of this helpers are identical except
+that helpers from this module adds unique key as query parameter for each file included with helpers below. For now key is modification time
+of the file. So we can guarantee that when file will be modified key will be changed and file will be reloaded by the browser. This works only
+for local files included with absolute url ("http://host/file.css"), absolute path ("/file.css") or relative path ("file.css"). And they will
+become something like "http://host/file.css?nc=1384766621", "/file.css?nc=1384766621", "file.css"?nc=1384766621" respectively.
+
+One important thing is that key for modified file will be changed only after application reload, because modification time for included files
+will be cached to be more efficient. This shouldn't be big problem, because when you updating your app with new version you also changed your
+perl files and should reload application. Or if you are on development morbo server it will reload application for you.
+
+=head1 CONFIGURATION
+
+Config for plugin accepts this options
+
+=head2 key
+
+Which query key should be used. Default is "nc".
+
+=head1 HELPERS
+
+Mojolicious::Plugin::TagHelpers::NoCaching implements the following helpers
+
+=head2 javascript_nc "url_or_path"
+
+Same as L<javascript|Mojolicious::Plugin::TagHelpers/javascript>, but will add query key and value to prevent caching
+
+=head2 stylesheet_nc "url_or_path"
+
+Same as L<stylesheet|Mojolicious::Plugin::TagHelpers/stylesheet>, but will add query key and value to prevent caching
+
+=head2 image_nc "url_or_path"
+
+Same as L<image|Mojolicious::Plugin::TagHelpers/image>, but will add query key and value to prevent caching
+
+=head1 SEE ALSO
+
+L<Mojolicious::Plugin::TagHelpers>
+
+=head1 COPYRIGHT
+
+Copyright Oleg G <oleg@cpan.org>.
+
+This library is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+=cut
