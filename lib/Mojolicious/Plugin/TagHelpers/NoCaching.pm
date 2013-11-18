@@ -132,7 +132,7 @@ __END__
 
 =head1 NAME
 
-Mojolicious::Plugin::TagHelpers::NoCaching - Prevent caching for images, styles, js if they were modified on FS
+Mojolicious::Plugin::TagHelpers::NoCaching - Force images, styles, js reloading by the browser if they were modified on filesystem
 
 =head1 SYNOPSIS
 
@@ -159,8 +159,8 @@ Mojolicious::Plugin::TagHelpers::NoCaching - Prevent caching for images, styles,
 =head1 DESCRIPTION
 
 When you updating your project on production with new version, new version often contains changed styles, javascript, images.
-You fetched all new files from repository, restarted application, but browsers still shows you old images, your html looks like
-a shit (because of old styles on new html), javascript events doesn't work (because of the old javascript). All of this because your
+You fetched all new files from the repository, restarted application, but browsers still shows you old images, your html looks like
+a shit (because of old styles on new html), javascript events doesn't work (because of the old js in use). All of this because your
 browser cached old version of included files and don't want to reload it.
 
 If you ever come across this, this module will help you.
@@ -169,12 +169,12 @@ If you ever come across this, this module will help you.
 
 This plugin contains several helpers described below. All this helpers are alternatives for helpers with same name (but without _nc suffix)
 from L<Mojolicious::Plugin::TagHelpers>. "_nc" suffix in helpers names means "no caching". Behaviour of this helpers are identical except
-that helpers from this module adds unique key as query parameter for each file included with helpers below. For now key is modification time
-of the file. So we can guarantee that when file will be modified key will be changed and file will be reloaded by the browser. This works only
-for local files included with absolute url ("http://host/file.css"), absolute path ("/file.css") or relative path ("file.css"). And they will
-become something like "http://host/file.css?nc=1384766621", "/file.css?nc=1384766621", "file.css"?nc=1384766621" respectively.
+that helpers from this module adds query parameter with file version for each file included with helpers described below. For now query 
+parameter is modification time of the file. So we can guarantee that when file will be modified query parameter will be changed and file will be reloaded by
+the browser. This works only for local files included with absolute url ("http://host/file.css"), absolute path ("/file.css") or relative path ("file.css").
+And they will become something like "http://host/file.css?nc=1384766621", "/file.css?nc=1384766621", "file.css"?nc=1384766621" respectively.
 
-One important thing is that key for modified file will be changed only after application reload, because modification time for included files
+One important thing is that query parameter for modified file will be changed only after application reload, because modification time for included files
 will be cached to be more efficient. This shouldn't be big problem, because when you updating your app with new version you also changed your
 perl files and should reload application. Or if you are on development morbo server it will reload application for you.
 
