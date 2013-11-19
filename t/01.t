@@ -15,6 +15,7 @@ $t->get_ok('/p1');
 $dom = $t->tx->res->dom;
 like(my $src = $dom->html->head->script->attr('src'), qr!/app.js\?v=12&nc=\d+!, "url with query param");
 is($dom->html->head->link->attr('href'), 'mem.css', "url to inline css");
+is($dom->html->body->img->attr('src'), '../lite-01.pl', "url to the image outside public dir");
 my $time = time() + 1000;
 
 utime $time, $time, 't/public/app.js';

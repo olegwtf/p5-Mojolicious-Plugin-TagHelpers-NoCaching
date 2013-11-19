@@ -2,7 +2,7 @@ package Mojolicious::Plugin::TagHelpers::NoCaching;
 
 use Mojo::Base 'Mojolicious::Plugin';
 use Mojo::URL;
-use Mojo::Path;
+use Cwd;
 
 our $VERSION = '0.02';
 
@@ -88,10 +88,12 @@ sub _href2filepath {
 	$asset->is_file
 		or return;
 	
-	my $path = Mojo::Path->new($asset->path)->canonicalize;
+	my $path = Cwd::realpath($asset->path)
+		or return;
+	
 	my $ok;
 	for my $p (@{$static->paths}) {
-		$ok = $path->contains($p)
+		$ok = index($path, $p) == 0
 			and last;
 	}
 	# check is found file is inside public directory

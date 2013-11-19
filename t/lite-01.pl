@@ -29,6 +29,7 @@ __DATA__
 		%= stylesheet_nc "mem.css";
 	</head>
 	<body>
+		%= image_nc "../lite-01.pl"
 	</body>
 </html>
 
