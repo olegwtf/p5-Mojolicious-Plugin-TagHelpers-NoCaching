@@ -3,6 +3,7 @@ package Mojolicious::Plugin::TagHelpers::NoCaching;
 use Mojo::Base 'Mojolicious::Plugin';
 use Mojo::URL;
 use Cwd;
+use File::Spec;
 
 our $VERSION = '0.02';
 
@@ -88,9 +89,7 @@ sub _href2filepath {
 	$asset->is_file
 		or return;
 	
-	my $path = Cwd::realpath($asset->path)
-		or return;
-	
+	my $path = File::Spec->canonpath(Cwd::realpath($asset->path)||return);
 	my $ok;
 	for my $p (@{$static->paths}) {
 		$ok = index($path, $p) == 0
