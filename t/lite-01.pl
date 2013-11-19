@@ -36,6 +36,7 @@ __DATA__
 <html>
 	<head>
 		%= stylesheet_nc "./style.css";
+		%= stylesheet_nc "app.css";
 	</head>
 	<body>
 	</body>

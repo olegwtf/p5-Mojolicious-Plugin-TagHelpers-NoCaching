@@ -4,7 +4,7 @@ use Mojo::Base 'Mojolicious::Plugin';
 use Mojo::URL;
 use Mojo::Path;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub register {
 	my ($plugin, $app, $cfg) = @_;
@@ -49,6 +49,23 @@ sub register {
 	});
 }
 
+sub _href2absolute {
+	my ($controller, $href) = @_;
+	
+	$href =~ s/\?.+//; # query params
+	if ($href =~ m!^(?:/|[a-z]+://)!i) {
+		# absolute
+		return $href;
+	}
+	
+	my $path = $controller->req->url->path;
+	$path =~ s![^/]+$!!;
+	$path = '/' if $path eq '';
+	$href = $path . $href;
+	
+	return $href;
+}
+
 sub _href2filepath {
 	my ($controller, $href) = @_;
 	
@@ -62,18 +79,6 @@ sub _href2filepath {
 		}
 		
 		$href = $url->path;
-	}
-	else {
-		# remove any query parameters
-		$href =~ s/\?.+//;
-		
-		if ($href !~ m!^/!) {
-			# relative url
-			my $path = $controller->req->url->path;
-			$path =~ s![^/]+$!!;
-			$path = '/' if $path eq '';
-			$href = $path . $href;
-		}
 	}
 	
 	my $static =$controller->app->static;
@@ -103,11 +108,13 @@ sub _nc_key {
 sub _nc_href {
 	my ($self, $controller, $href) = @_;
 	
-	unless (exists $self->{url2path}{$href}) {
-		$self->{url2path}{$href} = _href2filepath($controller, $href);
+	my $abs_href = _href2absolute($controller, $href);
+	
+	unless (exists $self->{url2path}{$abs_href}) {
+		$self->{url2path}{$abs_href} = _href2filepath($controller, $abs_href);
 	}
 	
-	my $path = $self->{url2path}{$href}
+	my $path = $self->{url2path}{$abs_href}
 		or return $href;
 	
 	unless (exists $self->{path2key}{$path}) {

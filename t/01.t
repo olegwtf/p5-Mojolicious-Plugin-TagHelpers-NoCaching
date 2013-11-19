@@ -24,6 +24,7 @@ is($dom->html->head->script->attr('src'), $src, "mtime cached");
 
 $t->get_ok('/p1/p2');
 $dom = $t->tx->res->dom;
-like($dom->html->head->link->attr('href'), qr!\./style\.css\?nc=\d+!, "relative url from sub path");
+like($dom->html->head->link->[0]->attr('href'), qr!\./style\.css\?nc=\d+!, "relative url from sub path");
+is($dom->html->head->link->[1]->attr('href'), 'app.css', "relative url from sub path on non exsitent file, but cached from other request");
 
 done_testing;

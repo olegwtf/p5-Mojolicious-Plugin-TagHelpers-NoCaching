@@ -1,2 +1,5 @@
+0.02
+      - fix for relative paths with same name from different request paths
+
 0.01 Mon Nov 18 22:55:54 2013
       - original version;
