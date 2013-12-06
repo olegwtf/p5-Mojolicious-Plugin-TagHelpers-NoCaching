@@ -6,7 +6,7 @@ WriteMakefile(
 	NAME              => 'Mojolicious::Plugin::TagHelpers::NoCaching',
 	LICENSE           => 'perl',
 	VERSION_FROM      => 'lib/Mojolicious/Plugin/TagHelpers/NoCaching.pm',
-	PREREQ_PM         => { 'Mojolicious' => 2.49 },
+	PREREQ_PM         => { 'Mojolicious' => 3.12 },
 	BUILD_REQUIRES    => {
 		'Test::More' => 0.88
 	},

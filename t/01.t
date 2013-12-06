@@ -5,7 +5,7 @@ use Mojo::DOM;
 
 require 't/lite-01.pl';
 
-my $attr_method = Mojo::DOM->can('attr') ? 'attr' : 'attrs';
+my $attr_method = Mojo::DOM->can('attrs') ? 'attrs' : 'attr';
 
 my $t = Test::Mojo->new();
 $t->get_ok('/');

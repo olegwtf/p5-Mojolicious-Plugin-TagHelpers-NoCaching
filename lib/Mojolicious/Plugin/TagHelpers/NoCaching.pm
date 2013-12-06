@@ -5,7 +5,7 @@ use Mojo::URL;
 use File::Spec;
 use Cwd;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 sub register {
 	my ($plugin, $app, $cfg) = @_;

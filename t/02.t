@@ -1,10 +1,11 @@
 use strict;
 use Test::More;
 use Test::Mojo;
+use Mojo::DOM;
 
 require 't/lite-02.pl';
 
-my $attr_method = Mojo::DOM->can('attr') ? 'attr' : 'attrs';
+my $attr_method = Mojo::DOM->can('attrs') ? 'attrs' : 'attr';
 
 my $t = Test::Mojo->new();
 $t->get_ok('/');
