@@ -1,3 +1,6 @@
+0.04 Sun Jan 18 14:41:25 NOVT 2015
+      - move from deprecated DOM and Collection methods inside tests
+
 0.03 Fri Dec  6 22:16:31 2013
       - fix Mojo prereq version and tests: rt#91208
 
