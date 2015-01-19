@@ -1,3 +1,6 @@
+0.05 Mon Jan 19 13:01:21 NOVT 2015
+      - fix compatibility with old Mojolicious inside tests
+
 0.04 Sun Jan 18 14:41:25 NOVT 2015
       - move from deprecated DOM and Collection methods inside tests
 
